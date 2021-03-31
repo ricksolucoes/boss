@@ -7,13 +7,17 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func GetTextOrDef(question string, def string) string {
+// GetTextOrDef get a new text or default value
+func GetTextOrDef(label string, def string) string {
 	prompt := promptui.Prompt{
-		Label:   question,
-		Default: def,
+		Label:       label,
+		Default:     def,
+		HideEntered: true,
+		Pointer:     promptui.PipeCursor,
 	}
 
 	result, err := prompt.Run()
+
 	if err != nil {
 		if err.Error() == "^C" {
 			os.Exit(1)
@@ -24,9 +28,10 @@ func GetTextOrDef(question string, def string) string {
 	return result
 }
 
-func GetText(question string, required bool) (string, error) {
+// GetText get a new text
+func GetText(label string, required bool) (string, error) {
 	prompt := promptui.Prompt{
-		Label: question,
+		Label: label,
 		Validate: func(result string) error {
 			if len(result) == 0 && required {
 				return fmt.Errorf("Value is required!")
@@ -34,13 +39,13 @@ func GetText(question string, required bool) (string, error) {
 			return nil
 		},
 	}
-
 	return prompt.Run()
 }
 
-func GetPassword(question string, required bool) (string, error) {
+// GetPassword prompts for credentials
+func GetPassword(label string, required bool) (string, error) {
 	prompt := promptui.Prompt{
-		Label: question,
+		Label: label,
 		Mask:  '*',
 		Validate: func(result string) error {
 			if len(result) == 0 && required {
@@ -52,6 +57,7 @@ func GetPassword(question string, required bool) (string, error) {
 	return prompt.Run()
 }
 
+// GetConfirmation write a question
 func GetConfirmation(question string, def bool) (bool, error) {
 	prompt := promptui.Prompt{
 		Label:     question,

@@ -42,10 +42,10 @@ func LoadPackage(bossPath string) (*BossPackage, error) {
 }
 
 // SaveToFile save changes of boss.json file
-func (b *BossPackage) SaveToFile(bossPath string) error {
+func (b *BossPackage) SaveToFile(bossPath string) ([]byte, error) {
 	buf, err := json.MarshalIndent(b, "", "  ")
 	if err != nil {
-		return err
+		return buf, err
 	}
-	return ioutil.WriteFile(bossPath, buf, os.ModePerm)
+	return buf, ioutil.WriteFile(bossPath, buf, os.ModePerm)
 }

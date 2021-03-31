@@ -56,6 +56,7 @@ func initalizePackage(config *configuration.Configuration, quiet bool) error {
 	}
 
 	var pkg = models.MakeBossPackage()
+
 	if quiet {
 		pkg.Name = folderName
 		pkg.Version = "1.0.0"
@@ -69,7 +70,11 @@ func initalizePackage(config *configuration.Configuration, quiet bool) error {
 		pkg.MainSrc = ui.GetTextOrDef("source folder: (./)", "./")
 	}
 
-	return pkg.SaveToFile(finalFile)
+	json, err := pkg.SaveToFile(finalFile)
+	if err == nil {
+		fmt.Println("\n" + string([]byte(json)))
+	}
+	return err
 }
 
 func printHead() {
